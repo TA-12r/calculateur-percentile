@@ -161,22 +161,11 @@ if (!ageSA || ageJour === "" || !poids) {
     let percentile = Math.round(normDist(z_score) * 100)
 
 
-    /* Afficher le résultat */
-    /* Couleur selon le percentile */
-let couleur
-
-if (percentile < 10) {
-    couleur = "#c0392b"
-} else if (percentile > 90) {
-    couleur = "#e67e22"
-} else {
-    couleur = "#1d7a5a"
-}
 
 /* Afficher le résultat */
 zone.innerHTML = `
-    <p style="color: ${couleur}; font-weight: bold; margin-top: 16px;">
-        Z-score du poids à la naissance : ${z_score.toFixed(2)}<br>
+    <p style="color:  #1a1a1a; font-weight: bold; margin-top: 16px;">
+        Z-score du poids à la naissance : ${z_score.toFixed(2)}<br> /*<br> permet de faire un retour à la ligne*/
         Percentile du poids à la naissance : ${percentile}e
     </p>
 `
