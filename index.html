@@ -1,0 +1,190 @@
+<!DOCTYPE html> <!-- Déclare que c'est une page HTML5 -->
+<html>
+    <head>
+        <title>Calculateur de percentile - Mayotte</title>
+
+        <style> /* CSS : mise en forme */
+
+            /* Police et fond de toute la page */
+            body {
+                font-family: Georgia, serif;
+                background-color: #F2F4F7;
+                max-width: 520px;
+                margin: 40px auto;
+                padding: 30px;
+            }
+
+            /* Titre principal avec barre orange */
+            h1 {
+                font-size: 22px;
+                color: #0B3D5E;
+                border-bottom: 3px solid #E8611A;
+                padding-bottom: 10px;
+            }
+
+            /* Étiquettes des champs */
+            label {
+                display: block;
+                margin-top: 16px;
+                font-size: 13px;
+                color: #0B3D5E;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            /* Champs de saisie */
+            input, select {
+                width: 100%;
+                padding: 9px 12px;
+                margin-top: 5px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+                color: #1a1a1a;
+                background: #fff;
+                box-sizing: border-box;
+            }
+
+            /* Bordure orange quand on clique sur un champ */
+            input:focus, select:focus {
+                outline: none;
+                border-color: #E8611A;
+            }
+
+            /* Bouton orange */
+            button {
+                margin-top: 24px;
+                width: 100%;
+                padding: 11px;
+                background-color: #E8611A;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 15px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            /* Bouton plus foncé au survol */
+            button:hover {
+                background-color: #c94f12;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <h1>Calculateur de percentile - Mayotte</h1>
+        <p>Ceci vient d'un projet de thèse mené en collaboration avec l'ARS de Mayotte...</p>
+
+        <!-- Liste déroulante pour le sexe -->
+        <label>Sexe du patient</label>
+        <select id="sexe">
+            <option>Fille</option>
+            <option>Garçon</option>
+        </select>
+
+        <!-- Âge gestationnel en semaines -->
+        <label>Âge gestationnel (semaines)</label>
+        <input type="number" id="ageSA" min="24" max="42" placeholder="ex : 35">
+
+        <!-- Jours complémentaires -->
+        <label>Âge gestationnel complémentaire (jours)</label>
+        <input type="number" id="ageJour" min="0" max="6" placeholder="ex : 4">
+
+        <!-- Poids de naissance -->
+        <label>Poids de naissance (grammes)</label>
+        <input type="number" id="poids" min="0" placeholder="ex : 2390">
+
+        <!-- Bouton qui lance la fonction calculer() -->
+        <button onclick="calculer()">Calculer le percentile</button>
+
+        <!-- Zone vide où le résultat va apparaître -->
+        <div id="resultat"></div>
+
+ 
+
+        <script> /* JavaScript : le cerveau du calculateur */
+
+       /*Convertit un z-score en percentile  équivalent de Norm_Dist dans Excel*/
+    function normDist(z) {
+    let t = 1 / (1 + 0.2315419 * Math.abs(z))
+    let d = 0.3989423 * Math.exp(-z * z / 2)
+    let p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.7814779 + t * (-1.8212560 + t * 1.3302744))))
+    if (z > 0) p = 1 - p
+    return p
+}
+
+           function calculer() {
+
+            
+    /* Lire les valeurs des champs */
+    let sexe    = document.getElementById("sexe").value.trim()
+    let ageSA   = document.getElementById("ageSA").value
+    let ageJour = document.getElementById("ageJour").value
+    let poids   = document.getElementById("poids").value
+
+    let zone = document.getElementById("resultat")
+
+
+/* Message erreur */
+if (!ageSA || ageJour === "" || !poids) {
+   zone.innerHTML =  `<p style="color: #c0392b; margin-top: 16px;"> Veuillez remplir tous les champs.</p>`
+    return
+}
+
+
+
+    /* Convertit le texte en nombres */
+    let SA      = parseFloat(ageSA)
+    let jours   = parseFloat(ageJour)
+    let poidsg  = parseFloat(poids)
+
+    /* CONVERTION POUR EQUATION  Âge gestationnel exact en semaines décimales */
+    let AG = SA + (jours / 7)
+
+    /* Variables pour le calcul */
+    let poids_moyen, std_moyen, z_score
+
+    /* Formules polynomiales VBA si c'est un garçon.. sinon c'est une fille*/
+    if (sexe === "Garçon") {
+        poids_moyen = -37421 + 5646.76902*AG - 322.5147*Math.pow(AG,2) + 8.53852*Math.pow(AG,3) - 0.09763*Math.pow(AG,4) + 0.00033525*Math.pow(AG,5)
+        std_moyen   = -103106 + 16774*AG - 1083.76115*Math.pow(AG,2) + 34.69813*Math.pow(AG,3) - 0.54902*Math.pow(AG,4) + 0.00343*Math.pow(AG,5)
+    } else {
+        poids_moyen = -21531 + 3844.14514*AG - 251.45441*Math.pow(AG,2) + 7.52728*Math.pow(AG,3) - 0.09871*Math.pow(AG,4) + 0.00043186*Math.pow(AG,5)
+        std_moyen   = -1407.21997 + 1432.27678*AG - 168.98863*Math.pow(AG,2) + 7.743*Math.pow(AG,3) - 0.1563*Math.pow(AG,4) + 0.00117*Math.pow(AG,5)
+    }
+
+
+   /* Z-score et percentile */
+    z_score = (poidsg - poids_moyen) / std_moyen
+    let percentile = Math.round(normDist(z_score) * 100)
+
+
+    /* Afficher le résultat */
+    let couleur, message
+
+    if (percentile < 10) {
+        couleur = "#c0392b"
+        message = "Poids insuffisant (< P10)"
+    } else if (percentile > 90) {
+        couleur = "#e67e22"
+        message = "Poids élevé (> P90)"
+    } else {
+        couleur = "#1d7a5a"
+        message = "Poids dans la norme (P10–P90)"
+    }
+
+    /* Afficher le résultat */
+    zone.innerHTML = `
+        <p style="color: ${couleur}; font-weight: bold; margin-top: 16px;">
+            Z-score : ${z_score.toFixed(2)} | Percentile : ${percentile}e
+        </p>
+        <p style="color: ${couleur}; font-size: 13px;">${message}</p>
+    `
+    
+}
+
+        </script>
+    </body>
+</html>
