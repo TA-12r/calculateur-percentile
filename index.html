@@ -162,26 +162,23 @@ if (!ageSA || ageJour === "" || !poids) {
 
 
     /* Afficher le résultat */
-    let couleur, message
+    /* Couleur selon le percentile */
+let couleur
 
-    if (percentile < 10) {
-        couleur = "#c0392b"
-        message = "Poids insuffisant (< P10)"
-    } else if (percentile > 90) {
-        couleur = "#e67e22"
-        message = "Poids élevé (> P90)"
-    } else {
-        couleur = "#1d7a5a"
-        message = "Poids dans la norme (P10–P90)"
-    }
+if (percentile < 10) {
+    couleur = "#c0392b"
+} else if (percentile > 90) {
+    couleur = "#e67e22"
+} else {
+    couleur = "#1d7a5a"
+}
 
-    /* Afficher le résultat */
-    zone.innerHTML = `
-        <p style="color: ${couleur}; font-weight: bold; margin-top: 16px;">
-            Z-score : ${z_score.toFixed(2)} | Percentile : ${percentile}e
-        </p>
-        <p style="color: ${couleur}; font-size: 13px;">${message}</p>
-    `
+/* Afficher le résultat */
+zone.innerHTML = `
+    <p style="color: ${couleur}; font-weight: bold; margin-top: 16px;">
+        Z-score : ${z_score.toFixed(2)} | Percentile : ${percentile}e
+    </p>
+`
     
 }
 
