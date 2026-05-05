@@ -163,12 +163,6 @@ if (poidsg >= 6000) {
 
 
 
-
-
-
-
-
-
                
     /* CONVERTION POUR EQUATION  Âge gestationnel exact en semaines décimales */
     let AG = SA + (jours / 7)
@@ -178,11 +172,11 @@ if (poidsg >= 6000) {
 
     /* Formules polynomiales VBA si c'est un garçon.. sinon c'est une fille*/
     if (sexe === "Garçon") {
-        poids_moyen = -37421 + 5646.76902*AG - 322.5147*Math.pow(AG,2) + 8.53852*Math.pow(AG,3) - 0.09763*Math.pow(AG,4) + 0.00033525*Math.pow(AG,5)
-        std_moyen   = -103106 + 16774*AG - 1083.76115*Math.pow(AG,2) + 34.69813*Math.pow(AG,3) - 0.54902*Math.pow(AG,4) + 0.00343*Math.pow(AG,5)
+        poids_moyen = -37420.67 + 5646.77*AG -322.515*Math.pow(AG,2) + 8.53852*Math.pow(AG,3) - 0.097635*Math.pow(AG,4) + 0.000335251*Math.pow(AG,5)
+        std_moyen   = -103105.85 + 16774.30*AG - 1083.76*Math.pow(AG,2) + 34.6981*Math.pow(AG,3) - 0.54902*Math.pow(AG,4) + 0.003431077*Math.pow(AG,5)
     } else {
-        poids_moyen = -21531 + 3844.14514*AG - 251.45441*Math.pow(AG,2) + 7.52728*Math.pow(AG,3) - 0.09871*Math.pow(AG,4) + 0.00043186*Math.pow(AG,5)
-        std_moyen   = -1407.21997 + 1432.27678*AG - 168.98863*Math.pow(AG,2) + 7.743*Math.pow(AG,3) - 0.1563*Math.pow(AG,4) + 0.00117*Math.pow(AG,5)
+        poids_moyen = -21531.30 + 3844.15*AG -251.454*Math.pow(AG,2) + 7.52728*Math.pow(AG,3) -0.098712*Math.pow(AG,4) + 0.000431857*Math.pow(AG,5)
+        std_moyen   = -1407.22 + 1432.28*AG -168.989*Math.pow(AG,2) + 7.74300*Math.pow(AG,3) -0.15630*Math.pow(AG,4) + 0.001166497*Math.pow(AG,5)
     }
 
 
