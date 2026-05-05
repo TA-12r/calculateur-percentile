@@ -75,7 +75,7 @@
     <body>
 
         <h1>Calculateur de percentile - Mayotte</h1>
-       <!-- <p>Ceci vient d'un projet de thèse mené en collaboration avec l'ARS de Mayotte.</p>-->
+       
 
         <!-- Liste déroulante pour le sexe -->
         <label>Sexe du patient</label>
@@ -151,13 +151,13 @@ if (jours < 0 || jours > 6) {
     return
 }
 
-if (poidsg <= 0) {
-    zone.innerHTML = `<p style="color: #c0392b; margin-top: 16px;"> Le poids doit être un nombre positif. Veuillez vérifier votre saisie.</p>`
+if (poidsg <= 450) {
+    zone.innerHTML = `<p style="color: #c0392b; margin-top: 16px;"> Le poids doit être supérieur à 450g. Veuillez vérifier votre saisie.</p>`
     return
 }
 
-if (poidsg >= 6500) {
-    zone.innerHTML = `<p style="color: #c0392b; margin-top: 16px;"> Le poids trop élevé. Veuillez vérifier votre saisie.</p>`
+if (poidsg >= 6000) {
+    zone.innerHTML = `<p style="color: #c0392b; margin-top: 16px;"> Le poids dois être inférieur à 6000kg. Veuillez vérifier votre saisie.</p>`
     return
 }
 
@@ -201,6 +201,7 @@ zone.innerHTML = `
 `
     
 }
+ <p> Les données saisies ne sont pas conservées au delà de l'affichage.</p>
 
         </script>
     </body>
